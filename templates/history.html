@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachable AI - Session History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="history-container">
+        <div class="history-header">
+            <h1>Teaching Session History</h1>
+            <a href="{{ url_for('chat') }}" class="btn btn-primary">Back to Chat</a>
+        </div>
+        
+        <div class="history-content">
+            <div id="sessions-history" class="sessions-history">
+                <!-- Sessions will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/history.js') }}"></script>
+</body>
+</html>

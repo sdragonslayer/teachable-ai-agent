@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachable AI - Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Teachable AI</h2>
+                <span class="user-info">{{ username }}</span>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Sessions</h3>
+                <button class="btn btn-secondary" onclick="createNewSession()">+ New Session</button>
+                <div id="sessions-list" class="sessions-list">
+                    <!-- Sessions will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Course Materials</h3>
+                <button class="btn btn-secondary" onclick="document.getElementById('file-input').click()">+ Upload Material</button>
+                <input type="file" id="file-input" style="display: none;" accept=".pdf,.txt" onchange="uploadMaterial(event)">
+                <div id="materials-list" class="materials-list">
+                    <!-- Materials will be listed here -->
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <a href="{{ url_for('history') }}" class="btn btn-outline">View History</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline">Logout</a>
+            </div>
+        </aside>
+        
+        <main class="chat-main">
+            <div id="current-session" style="display: none;">
+                <div class="session-header">
+                    <h2 id="session-title">New Session</h2>
+                    <p id="session-topic" class="session-topic"></p>
+                </div>
+                
+                <div id="messages-container" class="messages-container">
+                    <!-- Messages will be displayed here -->
+                </div>
+                
+                <div class="message-input-area">
+                    <form onsubmit="sendMessage(event)">
+                        <textarea id="message-input" placeholder="Teach the AI about this topic..." rows="4" required></textarea>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="no-session" class="empty-state">
+                <h2>No Session Selected</h2>
+                <p>Create a new session or select one from the sidebar to begin teaching.</p>
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

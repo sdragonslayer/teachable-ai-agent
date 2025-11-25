@@ -1,0 +1,11 @@
+For Loops
+
+A for loop is a fundamental programming construct used to repeat a block of instructions multiple times. It allows a program to iterate over a collection of elements, a sequence of numbers, or any range of values in a controlled manner. Unlike a simple repeated execution, a for loop provides a mechanism to automatically keep track of the current iteration and to stop after a specified condition is met.
+
+In many languages, for loops are used to traverse arrays, lists, strings, or other collections, processing each element in turn. They can also be used to perform a task a fixed number of times, such as calculating a sum, generating repeated outputs, or applying a transformation to every item in a dataset.
+
+For loops often include a loop variable, which changes automatically on each iteration. This variable can be used to access elements of a collection, count iterations, or influence the behavior of the repeated instructions. The loop can run in ascending or descending order and may include steps other than one, depending on the language or syntax.
+
+For loops are supported in nearly all programming languages, though the syntax differs. Some languages, like Python, emphasize iterating directly over collections, while others, like C, Java, and JavaScript, often use a more explicit loop counter with defined start and end points. Despite these differences, the core idea remains the same: execute a set of instructions repeatedly in a predictable and controlled manner.
+
+For loops can also be nested, where one loop runs inside another, enabling more complex operations such as processing multidimensional data or generating combinations of values. They are a key tool for automation, data processing, and algorithm implementation, providing an efficient alternative to writing repetitive code manually.
