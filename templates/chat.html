@@ -17,9 +17,6 @@
             <div class="sidebar-section">
                 <h3>Sessions</h3>
                 <button class="btn btn-secondary" onclick="createNewSession()">+ New Session</button>
-                <div id="sessions-list" class="sessions-list">
-                    <!-- Sessions will be loaded here -->
-                </div>
             </div>
             
             <div class="sidebar-section">
@@ -27,7 +24,7 @@
                 <button class="btn btn-secondary" onclick="document.getElementById('file-input').click()">+ Upload Material</button>
                 <input type="file" id="file-input" style="display: none;" accept=".pdf,.txt" onchange="uploadMaterial(event)">
                 <div id="materials-list" class="materials-list">
-                    <!-- Materials will be listed here -->
+                    <!-- Materials display -->
                 </div>
             </div>
             
@@ -45,7 +42,7 @@
                 </div>
                 
                 <div id="messages-container" class="messages-container">
-                    <!-- Messages will be displayed here -->
+                    <!-- Message display -->
                 </div>
                 
                 <div class="message-input-area">
@@ -58,7 +55,7 @@
             
             <div id="no-session" class="empty-state">
                 <h2>No Session Selected</h2>
-                <p>Create a new session or select one from the sidebar to begin teaching.</p>
+                <p>Create a new session to begin teaching.</p>
             </div>
         </main>
     </div>

@@ -1,35 +1,5 @@
 let currentSessionId = null;
 
-// Load sessions on page load
-document.addEventListener('DOMContentLoaded', () => {
-    loadSessions();
-});
-
-async function loadSessions() {
-    try {
-        const response = await fetch('/api/sessions');
-        const sessions = await response.json();
-        
-        const sessionsList = document.getElementById('sessions-list');
-        sessionsList.innerHTML = '';
-        
-        if (sessions.length === 0) {
-            sessionsList.innerHTML = '<p style="color: #9ca3af; font-size: 0.9rem;">No sessions yet</p>';
-            return;
-        }
-        
-        sessions.forEach(session => {
-            const div = document.createElement('div');
-            div.className = 'session-item';
-            div.textContent = session.title;
-            div.onclick = () => selectSession(session.id, session);
-            sessionsList.appendChild(div);
-        });
-    } catch (error) {
-        console.error('Error loading sessions:', error);
-    }
-}
-
 async function createNewSession() {
     const title = prompt('Enter session title:', 'New Teaching Session');
     if (!title) return;
@@ -46,7 +16,6 @@ async function createNewSession() {
         if (response.ok) {
             const session = await response.json();
             selectSession(session.id, session);
-            loadSessions();
         }
     } catch (error) {
         console.error('Error creating session:', error);
@@ -64,12 +33,6 @@ function selectSession(sessionId, session) {
     document.getElementById('session-topic').textContent = session.topic || 'No topic specified';
     
     loadMessages(sessionId);
-    
-    // Highlight active session
-    document.querySelectorAll('.session-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    event.target.classList.add('active');
 }
 
 async function loadMessages(sessionId) {
@@ -84,7 +47,6 @@ async function loadMessages(sessionId) {
             addMessageToUI(msg);
         });
         
-        // Scroll to bottom
         container.scrollTop = container.scrollHeight;
     } catch (error) {
         console.error('Error loading messages:', error);
@@ -110,7 +72,6 @@ function addMessageToUI(message) {
     div.appendChild(timestamp);
     container.appendChild(div);
     
-    // Scroll to bottom
     container.scrollTop = container.scrollHeight;
 }
 
@@ -118,7 +79,7 @@ async function sendMessage(event) {
     event.preventDefault();
     
     if (!currentSessionId) {
-        alert('Please select or create a session first');
+        alert('Please create a session first');
         return;
     }
     
@@ -127,10 +88,8 @@ async function sendMessage(event) {
     
     if (!message) return;
     
-    // Clear input
     input.value = '';
     
-    // Add loading indicator
     const container = document.getElementById('messages-container');
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'message learner';
@@ -148,13 +107,10 @@ async function sendMessage(event) {
         if (response.ok) {
             const data = await response.json();
             
-            // Remove loading indicator
             loadingDiv.remove();
             
-            // Add student message
             addMessageToUI(data.student_message);
             
-            // Add AI response
             addMessageToUI(data.ai_message);
         } else {
             loadingDiv.remove();
@@ -184,7 +140,6 @@ async function uploadMaterial(event) {
         if (response.ok) {
             const data = await response.json();
             alert(`Successfully uploaded "${data.filename}"\nProcessed ${data.chunks_processed} chunks`);
-            // Reset file input
             document.getElementById('file-input').value = '';
         } else {
             const error = await response.json();

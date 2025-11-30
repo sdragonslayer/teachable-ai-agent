@@ -4,10 +4,13 @@ import os
 import json
 from datetime import datetime
 
-from config import SECRET_KEY, SESSION_TYPE, ALLOWED_EXTENSIONS
-from utils.embeddings import get_embedding, generate_learner_response
-from utils.pinecone_db import search_similar, get_relevant_context, store_conversation, store_embedding
-from utils.prompt_builder import build_rag_prompt, get_system_prompt, format_context
+from config import SECRET_KEY, ALLOWED_EXTENSIONS
+from utils.pinecone_db import get_relevant_context, store_conversation, store_embedding
+from utils.prompt_builder import (
+    get_system_prompt,
+    get_embedding, 
+    generate_learner_response
+)
 from utils.document_loader import process_document
 
 app = Flask(__name__)
@@ -19,7 +22,7 @@ conversations_db = {}
 
 
 def login_required(f):
-    """Decorator to require login."""
+    """Requires login"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'username' not in session:
@@ -30,7 +33,6 @@ def login_required(f):
 
 @app.route('/')
 def index():
-    """Redirect to login or chat based on session."""
     if 'username' in session:
         return redirect(url_for('chat'))
     return redirect(url_for('login'))
@@ -38,7 +40,7 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Handle user login with username/password."""
+    """Handle user login"""
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '').strip()
@@ -46,7 +48,6 @@ def login():
         if not username or not password:
             return render_template('login.html', error='Username and password required')
         
-        # Simple mock authentication - create or retrieve user
         if username not in users_db:
             users_db[username] = {'password': password, 'created_at': datetime.now().isoformat()}
         elif users_db[username]['password'] != password:
@@ -60,7 +61,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    """Handle user logout."""
+    """Handles User logout"""
     session.clear()
     return redirect(url_for('login'))
 
@@ -68,16 +69,15 @@ def logout():
 @app.route('/chat')
 @login_required
 def chat():
-    """Main chat interface for teaching sessions."""
+    """Chat Interface"""
     username = session['username']
-    sessions_list = sessions_db.get(username, [])
-    return render_template('chat.html', username=username, sessions=sessions_list)
+    return render_template('chat.html', username=username)
 
 
 @app.route('/history')
 @login_required
 def history():
-    """View past teaching sessions."""
+    """Past sessions"""
     username = session['username']
     user_sessions = sessions_db.get(username, [])
     return render_template('history.html', username=username, sessions=user_sessions)
@@ -86,7 +86,7 @@ def history():
 @app.route('/api/sessions', methods=['GET', 'POST'])
 @login_required
 def manage_sessions():
-    """Create or retrieve sessions."""
+    """Creates sessions or retrieves them"""
     username = session['username']
     
     if request.method == 'POST':
@@ -116,7 +116,7 @@ def manage_sessions():
 @app.route('/api/sessions/<session_id>/messages', methods=['GET', 'POST'])
 @login_required
 def manage_messages(session_id):
-    """Get or add messages to a session."""
+    """Session logic"""
     username = session['username']
     
     user_sessions = sessions_db.get(username, [])
@@ -133,6 +133,8 @@ def manage_messages(session_id):
             return jsonify({'error': 'Message cannot be empty'}), 400
         
         try:
+            conversation_history = current_session['messages'].copy()
+            
             student_msg = {
                 'role': 'student',
                 'content': student_input,
@@ -144,11 +146,14 @@ def manage_messages(session_id):
             
             if student_embedding:
                 relevant_context = get_relevant_context(student_embedding)
-                
                 system_prompt = get_system_prompt()
-                rag_prompt = build_rag_prompt(student_input, relevant_context)
                 
-                ai_response = generate_learner_response(student_input, relevant_context, system_prompt)
+                ai_response = generate_learner_response(
+                    student_input=student_input,
+                    context=relevant_context,
+                    system_prompt=system_prompt,
+                    conversation_history=conversation_history
+                )
                 
                 ai_msg = {
                     'role': 'learner',
@@ -159,7 +164,13 @@ def manage_messages(session_id):
                 
                 response_embedding = get_embedding(ai_response)
                 if response_embedding:
-                    store_conversation(student_input, ai_response, response_embedding, session_id, username)
+                    store_conversation(
+                        student_input, 
+                        ai_response, 
+                        response_embedding, 
+                        session_id, 
+                        username
+                    )
                 
                 return jsonify({
                     'student_message': student_msg,
@@ -178,7 +189,7 @@ def manage_messages(session_id):
 @app.route('/api/materials', methods=['GET', 'POST'])
 @login_required
 def manage_materials():
-    """Upload or retrieve course materials."""
+    """Upload/retrieve course materials"""
     username = session['username']
     
     if request.method == 'POST':

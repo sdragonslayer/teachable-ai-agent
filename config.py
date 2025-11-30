@@ -16,7 +16,6 @@ ANALYTICS_NAMESPACE = "analytics"
 
 # Flask 
 SECRET_KEY = "hellocmu1234"
-SESSION_TYPE = "filesystem"
 
 # Document Processing
 MAX_CHUNK_SIZE = 1000  # Characters per chunk

@@ -2,7 +2,7 @@ import PyPDF2
 from config import MAX_CHUNK_SIZE, CHUNK_OVERLAP
 
 
-def load_pdf(file_path: str) -> str:
+def load_pdf(file_path: str):
 
     try:
         text = ""
@@ -16,7 +16,7 @@ def load_pdf(file_path: str) -> str:
         return ""
 
 
-def load_txt(file_path: str) -> str:
+def load_txt(file_path: str):
 
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -41,7 +41,7 @@ def chunk_text(text, chunk_size = MAX_CHUNK_SIZE, overlap= CHUNK_OVERLAP):
     return chunks
 
 
-def process_document(file_path: str, file_type: str) -> list:
+def process_document(file_path: str, file_type: str):
     if file_type.lower() == 'pdf':
         text = load_pdf(file_path)
 

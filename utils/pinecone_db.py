@@ -21,7 +21,7 @@ def store_embedding(vector: list, metadata: dict, namespace: str, vector_id: str
         return None
 
 
-def search_similar(query_vector: list, namespace: str, top_k: int = 5) -> list:
+def search_similar(query_vector: list, namespace: str, top_k: int = 5):
 
     try:
         results = index.query(
@@ -36,7 +36,7 @@ def search_similar(query_vector: list, namespace: str, top_k: int = 5) -> list:
         return []
 
 
-def get_relevant_context(query_vector: list, top_k: int = 3) -> str:
+def get_relevant_context(query_vector: list, top_k: int = 3):
 
     try:
         results = search_similar(query_vector, COURSE_MATERIALS_NAMESPACE, top_k)
@@ -54,15 +54,14 @@ def get_relevant_context(query_vector: list, top_k: int = 3) -> str:
         return "Error retrieving course materials."
 
 
-def store_conversation(user_message: str, ai_response: str, embedding: list, 
-                       session_id: str, username: str):
+def store_conversation(user_message: str, ai_response: str, embedding: list, session_id: str, username: str):
 
     try:
         metadata = {
             "type": "conversation",
             "session_id": session_id,
             "username": username,
-            "user_message": user_message[:500],  # Truncate for metadata
+            "user_message": user_message[:500],  
             "ai_response": ai_response[:500],
             "timestamp": str(__import__('datetime').datetime.now().isoformat())
         }
