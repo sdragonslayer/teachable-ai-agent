@@ -6,7 +6,7 @@ load_dotenv()
 # OpenAI 
 OPENAI_API_KEY = "" #Add you own API key here
 OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
-OPENAI_LLM_MODEL = "gpt-5-chat-latest"
+OPENAI_LLM_MODEL = "gpt-5-2025-08-07"
 
 # Pinecone 
 PINECONE_API_KEY = ""
