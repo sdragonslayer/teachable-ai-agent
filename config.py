@@ -1,21 +1,20 @@
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # OpenAI 
-OPENAI_API_KEY = "" #Add you own API key here
+OPENAI_API_KEY = "your-api-key" # Add you own API key here
 OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
 OPENAI_LLM_MODEL = "gpt-5-2025-08-07"
 
 # Pinecone 
-PINECONE_API_KEY = ""
+PINECONE_API_KEY = "your-api-key" # Add you own API key here
 PINECONE_INDEX_NAME = "teachable-ai"
 COURSE_MATERIALS_NAMESPACE = "course_materials"
 ANALYTICS_NAMESPACE = "analytics"
 
 # Flask 
-SECRET_KEY = "hellocmu1234"
+SECRET_KEY = "secretkey1234" # for testing
 
 # Document Processing
 MAX_CHUNK_SIZE = 1000  # Characters per chunk
